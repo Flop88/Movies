@@ -1,8 +1,10 @@
-package ru.mvlikhachev.movies;
+package ru.mvlikhachev.movies.activities;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import ru.mvlikhachev.movies.R;
 
 public class MainActivity extends AppCompatActivity {
 
