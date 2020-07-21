@@ -1,6 +1,10 @@
 package ru.mvlikhachev.movies.activities;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Movie> movies;
     private RequestQueue requestQueue;
 
+    //Search
+    private EditText searchEditText;
+    private Button searchButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +47,25 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.hasFixedSize();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        searchEditText = findViewById(R.id.searchEditText);
+        searchButton = findViewById(R.id.searchButton);
+
         movies = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(this);
 
+    }
+
+    //Click on searchButton button
+    public void searchMovies(View view) {
+        movies.clear();
         getMovies();
     }
 
     private void getMovies() {
 
-        String url = "http://www.omdbapi.com/?apikey=b251238d&s=superman";
+        String search = searchEditText.getText().toString().trim();
+
+        String url = "http://www.omdbapi.com/?apikey=b251238d&s=" + search;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 url, null, new Response.Listener<JSONObject>() {
@@ -73,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     movieAdapter = new MovieAdapter(MainActivity.this, movies);
                     recyclerView.setAdapter(movieAdapter);
                 } catch (JSONException e) {
+                    Toast.makeText(MainActivity.this, "not found", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
